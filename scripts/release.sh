@@ -5,6 +5,12 @@ set -e
 
 VERSION_TYPE=${1:-patch}
 
+# 작업 트리가 깨끗해야 릴리스 커밋에 다른 변경이 섞이지 않는다.
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Working tree not clean — commit or stash first." >&2
+  exit 1
+fi
+
 # package.json = 버전 source of truth
 CURRENT_VERSION=$(node -p "require('./package.json').version")
 IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
@@ -20,6 +26,12 @@ NEW_VERSION_NUM="${MAJOR}.${MINOR}.${PATCH}"
 NEW_VERSION="v${NEW_VERSION_NUM}"
 
 echo "Current: v${CURRENT_VERSION}  →  New: ${NEW_VERSION}"
+
+# 태그가 이미 있으면 푸시/커밋 전에 중단 (재실행 안전).
+if git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
+  echo "Tag $NEW_VERSION already exists." >&2
+  exit 1
+fi
 
 # 1. 테스트 게이트 (실패 시 set -e 로 중단)
 echo "Running tests..."
