@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Summora",
+  "version": "0.1.0",
+  "description": "현재 탭을 Summora에 저장합니다.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "https://summora.advenoh.pe.kr/*",
+    "http://localhost:8080/*",
+    "http://127.0.0.1:8080/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Summora에 저장",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
