@@ -1,6 +1,6 @@
 {
   "name": "summora-chrome",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "현재 탭을 Summora에 저장하는 Chrome 확장",
