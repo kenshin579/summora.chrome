@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeUrl, isSavableUrl } from "./url.js";
+import { normalizeUrl, isSavableUrl, youtubeId } from "./url.js";
 
 describe("normalizeUrl", () => {
   it("youtube watch: v= 만 남기고 t/list/si 제거", () => {
@@ -56,6 +56,21 @@ describe("normalizeUrl", () => {
 
   it("비-http(s) 스킴은 그대로 반환", () => {
     expect(normalizeUrl("chrome://extensions")).toBe("chrome://extensions");
+  });
+});
+
+describe("youtubeId", () => {
+  it("watch / youtu.be / shorts / embed / music → ID", () => {
+    expect(youtubeId("https://www.youtube.com/watch?v=ABC123&t=1")).toBe("ABC123");
+    expect(youtubeId("https://youtu.be/ABC123?si=x")).toBe("ABC123");
+    expect(youtubeId("https://www.youtube.com/shorts/ABC123")).toBe("ABC123");
+    expect(youtubeId("https://www.youtube.com/embed/ABC123")).toBe("ABC123");
+    expect(youtubeId("https://music.youtube.com/watch?v=ABC123")).toBe("ABC123");
+  });
+  it("비-YouTube / 파싱 불가 → null", () => {
+    expect(youtubeId("https://blog.example.com/post")).toBeNull();
+    expect(youtubeId("https://www.youtube.com/")).toBeNull();
+    expect(youtubeId("not a url")).toBeNull();
   });
 });
 

@@ -3,20 +3,49 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      body { width: 320px; margin: 0; padding: 16px; font-family: -apple-system, system-ui, sans-serif; }
-      h1 { font-size: 14px; margin: 0 0 8px; }
-      .meta { font-size: 12px; color: #666; word-break: break-all; white-space: pre-line; margin-bottom: 12px; }
-      button { width: 100%; padding: 10px; font-size: 14px; border: 0; border-radius: 6px; background: #111; color: #fff; cursor: pointer; }
-      button:disabled { opacity: 0.5; cursor: default; }
-      .result { margin-top: 12px; font-size: 13px; }
-      .result a { color: #2563eb; }
+      :root{--paper:#faf6ee;--paper2:#f3ebd9;--ink:#2a221c;--ink2:#5d4f44;--ink3:#8c7d6f;
+        --line:#d8cdb7;--line-faint:#e8dfcc;--accent:#b54526;--accent-press:#993a20;--ok:#2f7d4f;}
+      *{box-sizing:border-box}
+      body{width:340px;margin:0;background:var(--paper);
+        font-family:-apple-system,system-ui,"Apple SD Gothic Neo",sans-serif;color:var(--ink);}
+      .head{display:flex;align-items:center;gap:9px;padding:13px 16px;border-bottom:1px solid var(--line-faint)}
+      .head img{width:26px;height:26px;border-radius:7px;display:block}
+      .head .name{font-size:15px;font-weight:700;letter-spacing:-.2px}
+      .body{padding:14px 16px 16px}
+      .note{font-size:13px;color:var(--ink2);padding:4px 0 2px}
+      .card{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+      .thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--paper2)}
+      .card-b{padding:10px 12px}
+      .row{display:flex;align-items:center;gap:9px;min-width:0}
+      .title{font-size:14px;line-height:1.35;font-weight:600;
+        display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+      .meta{display:flex;align-items:center;gap:7px;margin-top:8px;min-width:0}
+      .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 8px;
+        border-radius:999px;background:rgba(181,69,38,.1);color:var(--accent);white-space:nowrap;flex:0 0 auto}
+      .badge.link{background:var(--paper2);color:var(--ink2)}
+      .url{font-size:11.5px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .fav{width:15px;height:15px;border-radius:3px;flex:0 0 auto}
+      .btn{margin-top:14px;width:100%;padding:11px;font-size:14px;font-weight:700;border:0;border-radius:9px;
+        cursor:pointer;font-family:inherit;background:var(--accent);color:#fff;text-align:center}
+      .btn:hover{background:var(--accent-press)}
+      .btn:disabled{opacity:.6;cursor:default}
+      a.btn{display:block;text-decoration:none}
+      .success{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+      .confirm{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--ok)}
+      .check{width:20px;height:20px;border-radius:999px;background:var(--ok);color:#fff;
+        display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+      .err{margin-top:12px;font-size:12.5px;color:var(--accent);font-weight:600}
+      .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);
+        border-top-color:#fff;border-radius:50%;vertical-align:-2px;margin-right:6px;animation:sp .7s linear infinite}
+      @keyframes sp{to{transform:rotate(360deg)}}
     </style>
   </head>
   <body>
-    <h1>Summora에 저장</h1>
-    <div class="meta" id="meta"></div>
-    <button id="save">저장</button>
-    <div class="result" id="result"></div>
+    <div class="head"><img src="icons/icon-48.png" alt="" /><span class="name">Summora</span></div>
+    <div class="body">
+      <div id="card"></div>
+      <div id="action"></div>
+    </div>
     <script type="module" src="popup.js"></script>
   </body>
 </html>

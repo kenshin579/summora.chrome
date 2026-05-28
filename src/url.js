@@ -1,7 +1,13 @@
 // 제거 대상 추적 파라미터(접두사 utm_ 는 별도 처리)
 const TRACKING_PARAMS = new Set(["si", "fbclid", "gclid"]);
 
-function youtubeVideoId(u) {
+export function youtubeId(raw) {
+  let u;
+  try {
+    u = new URL(raw);
+  } catch {
+    return null;
+  }
   const host = u.hostname.replace(/^www\./, "");
   if (host === "youtu.be") {
     return u.pathname.slice(1).split("/")[0] || null;
@@ -23,7 +29,7 @@ export function normalizeUrl(raw) {
   }
   if (u.protocol !== "http:" && u.protocol !== "https:") return raw;
 
-  const id = youtubeVideoId(u);
+  const id = youtubeId(raw);
   if (id) return `https://www.youtube.com/watch?v=${id}`;
 
   for (const key of [...u.searchParams.keys()]) {
