@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font-family: -apple-system, system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+      h1 { font-size: 18px; }
+      label { display: block; font-size: 13px; margin-bottom: 6px; }
+      input { width: 100%; padding: 8px; font-size: 14px; box-sizing: border-box; }
+      button { margin-top: 12px; padding: 8px 16px; }
+      .saved { color: #16a34a; font-size: 13px; margin-left: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>Summora 설정</h1>
+    <label for="baseUrl">API 주소</label>
+    <input id="baseUrl" type="url" placeholder="https://summora.advenoh.pe.kr" />
+    <div>
+      <button id="save">저장</button>
+      <span class="saved" id="saved" hidden>저장됨 ✓</span>
+    </div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
