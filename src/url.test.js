@@ -26,6 +26,18 @@ describe("normalizeUrl", () => {
     );
   });
 
+  it("embed → 표준 watch", () => {
+    expect(normalizeUrl("https://www.youtube.com/embed/ABC123")).toBe(
+      "https://www.youtube.com/watch?v=ABC123"
+    );
+  });
+
+  it("music.youtube.com → 표준 watch", () => {
+    expect(normalizeUrl("https://music.youtube.com/watch?v=ABC123&list=RD")).toBe(
+      "https://www.youtube.com/watch?v=ABC123"
+    );
+  });
+
   it("일반 URL: utm_*/fbclid 제거하고 의미 있는 쿼리는 보존", () => {
     expect(
       normalizeUrl("https://blog.example.com/post?utm_source=x&id=7&fbclid=abc")
