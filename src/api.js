@@ -17,23 +17,18 @@ export async function saveArticle(baseUrl, url) {
       body: JSON.stringify({ url }),
     });
     if (!res.ok) {
-      let message = `저장 실패 (HTTP ${res.status})`;
+      let serverMessage;
       try {
         const body = await res.json();
-        if (body?.message) message = body.message;
-        else if (body?.error) message = body.error;
+        serverMessage = body?.message || body?.error || undefined;
       } catch {
-        // 본문 파싱 실패 시 기본 메시지 유지
+        // 본문 파싱 실패 시 serverMessage 없음
       }
-      return { ok: false, status: "error", message };
+      return { ok: false, status: "error", code: "http", httpStatus: res.status, serverMessage };
     }
     const article = await res.json();
     return { ok: true, status: "saved", article };
   } catch {
-    return {
-      ok: false,
-      status: "error",
-      message: "네트워크 오류: 백엔드에 연결할 수 없습니다.",
-    };
+    return { ok: false, status: "error", code: "network" };
   }
 }
