@@ -1,11 +1,12 @@
 import { normalizeUrl, isSavableUrl, youtubeId } from "./src/url.js";
 import { getBaseUrl, saveArticle } from "./src/api.js";
+import { t, applyI18n } from "./src/i18n.js";
 
 const cardEl = document.getElementById("card");
 const actionEl = document.getElementById("action");
 
-function cleanTitle(t) {
-  return (t || "").replace(/\s*-\s*YouTube$/, "").trim();
+function cleanTitle(raw) {
+  return (raw || "").replace(/\s*-\s*YouTube$/, "").trim();
 }
 function isHttpish(s) {
   return typeof s === "string" && /^(https?:|data:)/.test(s);
@@ -56,7 +57,7 @@ function renderCard(tab, url) {
   meta.className = "meta";
   const badge = document.createElement("span");
   badge.className = id ? "badge" : "badge link";
-  badge.textContent = id ? "▶ YouTube" : "🔗 링크";
+  badge.textContent = id ? `▶ ${t("badgeYouTube")}` : `🔗 ${t("badgeLink")}`;
   const urlEl = document.createElement("span");
   urlEl.className = "url";
   urlEl.textContent = url.replace(/^https?:\/\//, "");
@@ -71,7 +72,7 @@ function renderCard(tab, url) {
 function renderSaveButton(onClick) {
   const btn = document.createElement("button");
   btn.className = "btn";
-  btn.textContent = "저장";
+  btn.textContent = t("saveButton");
   btn.addEventListener("click", onClick);
   actionEl.replaceChildren(btn);
   return btn;
@@ -84,7 +85,7 @@ async function init() {
   if (!isSavableUrl(url)) {
     const note = document.createElement("div");
     note.className = "note";
-    note.textContent = "이 페이지는 저장할 수 없습니다.";
+    note.textContent = t("notSavable");
     cardEl.replaceChildren(note);
     return;
   }
@@ -100,7 +101,7 @@ async function save(url) {
   const spin = document.createElement("span");
   spin.className = "spin";
   btn.appendChild(spin);
-  btn.appendChild(document.createTextNode("저장 중…"));
+  btn.appendChild(document.createTextNode(t("saving")));
   actionEl.replaceChildren(btn);
 
   const baseUrl = await getBaseUrl();
@@ -115,7 +116,7 @@ async function save(url) {
     check.className = "check";
     check.textContent = "✓";
     confirm.appendChild(check);
-    confirm.appendChild(document.createTextNode("저장했어요"));
+    confirm.appendChild(document.createTextNode(t("saved")));
     wrap.appendChild(confirm);
     const id = result.article?.id;
     if (id != null) {
@@ -124,7 +125,7 @@ async function save(url) {
       a.href = `${baseUrl}/articles/${id}`;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
-      a.textContent = "웹앱에서 보기 →";
+      a.textContent = t("openInWebApp");
       wrap.appendChild(a);
     }
     actionEl.replaceChildren(wrap);
@@ -132,9 +133,17 @@ async function save(url) {
     renderSaveButton(() => save(url));
     const err = document.createElement("div");
     err.className = "err";
-    err.textContent = `⚠ ${result.message}`;
+    let msg;
+    // 서버 메시지는 백엔드가 내려준 그대로 표시한다(언어 무관 통과). 없으면 코드별 번역 사용.
+    if (result.serverMessage) msg = result.serverMessage;
+    else if (result.code === "network") msg = t("errNetwork");
+    else msg = t("errHttp", [String(result.httpStatus)]);
+    err.textContent = `⚠ ${msg}`;
     actionEl.appendChild(err);
   }
 }
 
+// applyI18n 은 정적 data-i18n 노드(이 페이지는 헤더뿐)를 번역한다.
+// init()/save() 가 동적으로 만드는 노드는 생성 시점에 t() 로 직접 번역한다.
+applyI18n();
 init();

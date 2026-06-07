@@ -1,0 +1,20 @@
+{
+  "extName": { "message": "Summora" },
+  "extDescription": { "message": "현재 탭을 Summora에 저장합니다." },
+  "actionTitle": { "message": "Summora에 저장" },
+  "saveButton": { "message": "저장" },
+  "saving": { "message": "저장 중…" },
+  "saved": { "message": "저장했어요" },
+  "openInWebApp": { "message": "웹앱에서 보기 →" },
+  "badgeYouTube": { "message": "YouTube" },
+  "badgeLink": { "message": "링크" },
+  "notSavable": { "message": "이 페이지는 저장할 수 없습니다." },
+  "optionsTitle": { "message": "Summora 설정" },
+  "apiUrlLabel": { "message": "API 주소" },
+  "optionsSaved": { "message": "저장됨 ✓" },
+  "errNetwork": { "message": "네트워크 오류: 백엔드에 연결할 수 없습니다." },
+  "errHttp": {
+    "message": "저장 실패 (HTTP $status$)",
+    "placeholders": { "status": { "content": "$1" } }
+  }
+}

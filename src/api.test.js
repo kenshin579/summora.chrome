@@ -43,7 +43,7 @@ describe("saveArticle", () => {
     );
   });
 
-  it("비-2xx 이면 error + 서버 메시지", async () => {
+  it("비-2xx 이면 code:http + serverMessage 통과", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => ({
@@ -55,10 +55,12 @@ describe("saveArticle", () => {
     const r = await saveArticle("https://api.test", "ftp://x");
     expect(r.ok).toBe(false);
     expect(r.status).toBe("error");
-    expect(r.message).toBe("지원하지 않는 URL");
+    expect(r.code).toBe("http");
+    expect(r.httpStatus).toBe(400);
+    expect(r.serverMessage).toBe("지원하지 않는 URL");
   });
 
-  it("fetch 예외면 네트워크 오류 메시지", async () => {
+  it("fetch 예외면 code:network", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => {
@@ -68,6 +70,6 @@ describe("saveArticle", () => {
     const r = await saveArticle("https://api.test", "https://x");
     expect(r.ok).toBe(false);
     expect(r.status).toBe("error");
-    expect(r.message).toMatch(/네트워크/);
+    expect(r.code).toBe("network");
   });
 });

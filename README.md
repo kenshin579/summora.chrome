@@ -1,43 +1,46 @@
-# Summora Chrome 확장
+# Summora Chrome Extension
 
-현재 보고 있는 탭의 URL을 클릭 한 번으로 [Summora](https://github.com/kenshin579/summora)에 저장하는 Chrome 확장 프로그램입니다 (Manifest V3).
+A Manifest V3 Chrome extension that saves the URL of the tab you're viewing to [Summora](https://github.com/kenshin579/summora) with one click.
 
-## 기능
+## Features
 
-- 툴바 아이콘을 누르면 현재 탭의 제목과 URL을 보여주고, **저장** 버튼으로 Summora 백엔드(`POST /api/articles`)에 등록합니다.
-- 저장 전 URL을 정규화합니다 — 추적 파라미터(`utm_*`, `si`, `fbclid`, `gclid`) 제거, YouTube 링크(`youtu.be`, `/shorts`, `/embed`, `music`/`m.youtube`)는 표준 `watch?v=` URL로 변환.
-- `http`/`https`가 아닌 페이지(예: `chrome://`)는 저장 버튼이 비활성화됩니다.
-- 저장에 성공하면 **웹앱에서 보기** 링크를 함께 표시합니다.
-- 옵션 페이지에서 백엔드 base URL을 변경할 수 있습니다 (`chrome.storage.sync`에 저장).
+- Click the toolbar icon to see the current tab's title and URL, then hit **Save** to register it with the Summora backend (`POST /api/articles`).
+- URLs are normalized before saving — tracking params (`utm_*`, `si`, `fbclid`, `gclid`) are stripped, and YouTube links (`youtu.be`, `/shorts`, `/embed`, `music`/`m.youtube`) are converted to canonical `watch?v=` URLs.
+- Non-`http`/`https` pages (e.g. `chrome://`) disable the save button.
+- On success, an **Open in web app** link is shown.
+- The backend base URL can be changed on the options page (stored in `chrome.storage.sync`).
+- UI is localized (English / Korean) via Chrome's `chrome.i18n`, following the browser's UI language. English is the fallback (`default_locale`).
 
-## 구성
+## Layout
 
-| 파일 | 역할 |
+| File | Role |
 |------|------|
-| `manifest.json` | MV3 매니페스트 (`activeTab`, `storage` 권한) |
-| `popup.html` / `popup.js` | 팝업 UI · 저장 동작 |
-| `options.html` / `options.js` | 백엔드 base URL 설정 |
-| `src/url.js` | URL 정규화 / 저장 가능 여부 판정 |
-| `src/api.js` | base URL 저장·조회, `saveArticle` fetch |
-| `icons/` | 16 / 48 / 128 아이콘 |
+| `manifest.json` | MV3 manifest (`activeTab`, `storage`, `default_locale: en`) |
+| `popup.html` / `popup.js` | Popup UI · save action |
+| `options.html` / `options.js` | Backend base URL settings |
+| `src/url.js` | URL normalization / savable check |
+| `src/api.js` | base URL load/save, `saveArticle` fetch (returns error codes) |
+| `src/i18n.js` | `chrome.i18n` helpers (`t`, `applyI18n`) |
+| `_locales/` | `en` / `ko` message catalogs |
+| `icons/` | 16 / 48 / 128 icons |
 
-기본 백엔드 주소는 `https://summora.advenoh.pe.kr`이며, 로컬 개발 시 옵션 페이지에서 `http://localhost:8080`으로 바꿔 사용합니다.
+The default backend is `https://summora.advenoh.pe.kr`; for local development, switch it to `http://localhost:8080` on the options page.
 
-## 설치 (개발자 모드)
+## Install (developer mode)
 
-1. `chrome://extensions` 접속 → 우측 상단 **개발자 모드** 켜기
-2. **압축해제된 확장 프로그램을 로드** 클릭 → 이 저장소 폴더 선택
-3. 툴바의 Summora 아이콘으로 현재 탭 저장
+1. Open `chrome://extensions` → enable **Developer mode** (top right)
+2. Click **Load unpacked** → select this repository folder
+3. Use the Summora toolbar icon to save the current tab
 
-> 로컬 백엔드에 저장하려면 [`summora`](https://github.com/kenshin579/summora) 저장소에서 `make up`으로 서버를 띄운 뒤, 확장 옵션에서 base URL을 `http://localhost:8080`으로 설정하세요.
+> To save to a local backend, start the server with `make up` in the [`summora`](https://github.com/kenshin579/summora) repo, then set the base URL to `http://localhost:8080` in the extension options.
 
-## 테스트
+## Testing
 
 ```bash
 npm install
-npm test     # vitest (src/url.test.js, src/api.test.js)
+npm test     # vitest (src/url.test.js, src/api.test.js, src/i18n.test.js)
 ```
 
-## 관련 저장소
+## Related
 
-- [`summora`](https://github.com/kenshin579/summora) — 백엔드 API + 웹앱 (요약·태그·하이라이트)
+- [`summora`](https://github.com/kenshin579/summora) — backend API + web app (summaries, tags, highlights)
