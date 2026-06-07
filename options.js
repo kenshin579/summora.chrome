@@ -1,4 +1,5 @@
 import { getBaseUrl, setBaseUrl, DEFAULT_BASE_URL } from "./src/api.js";
+import { applyI18n } from "./src/i18n.js";
 
 const input = document.getElementById("baseUrl");
 const savedEl = document.getElementById("saved");
@@ -17,4 +18,5 @@ document.getElementById("save").addEventListener("click", async () => {
   }, 2000);
 });
 
+applyI18n();
 init();
