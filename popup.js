@@ -5,8 +5,8 @@ import { t, applyI18n } from "./src/i18n.js";
 const cardEl = document.getElementById("card");
 const actionEl = document.getElementById("action");
 
-function cleanTitle(t) {
-  return (t || "").replace(/\s*-\s*YouTube$/, "").trim();
+function cleanTitle(raw) {
+  return (raw || "").replace(/\s*-\s*YouTube$/, "").trim();
 }
 function isHttpish(s) {
   return typeof s === "string" && /^(https?:|data:)/.test(s);
