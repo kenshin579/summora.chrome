@@ -14,7 +14,8 @@ zip -r "$ZIP_FILE" \
   manifest.json \
   popup.html popup.js \
   options.html options.js \
-  src/url.js src/api.js \
+  src/url.js src/api.js src/i18n.js \
+  _locales \
   icons \
   -x '*.DS_Store' >&2
 
