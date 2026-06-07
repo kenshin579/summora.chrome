@@ -22,4 +22,11 @@ describe("locale catalogs", () => {
       }
     }
   });
+
+  it("errHttp 에 placeholder 정의가 있다", () => {
+    for (const lang of ["en", "ko"]) {
+      const cat = load(lang);
+      expect(cat.errHttp.placeholders?.status?.content, `${lang}/errHttp.placeholders`).toBe("$1");
+    }
+  });
 });

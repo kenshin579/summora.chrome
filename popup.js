@@ -134,6 +134,7 @@ async function save(url) {
     const err = document.createElement("div");
     err.className = "err";
     let msg;
+    // 서버 메시지는 백엔드가 내려준 그대로 표시한다(언어 무관 통과). 없으면 코드별 번역 사용.
     if (result.serverMessage) msg = result.serverMessage;
     else if (result.code === "network") msg = t("errNetwork");
     else msg = t("errHttp", [String(result.httpStatus)]);
@@ -142,5 +143,7 @@ async function save(url) {
   }
 }
 
+// applyI18n 은 정적 data-i18n 노드(이 페이지는 헤더뿐)를 번역한다.
+// init()/save() 가 동적으로 만드는 노드는 생성 시점에 t() 로 직접 번역한다.
 applyI18n();
 init();
