@@ -1,0 +1,20 @@
+{
+  "extName": { "message": "Summora" },
+  "extDescription": { "message": "Save the current tab to Summora." },
+  "actionTitle": { "message": "Save to Summora" },
+  "saveButton": { "message": "Save" },
+  "saving": { "message": "Saving…" },
+  "saved": { "message": "Saved" },
+  "openInWebApp": { "message": "Open in web app →" },
+  "badgeYouTube": { "message": "YouTube" },
+  "badgeLink": { "message": "Link" },
+  "notSavable": { "message": "This page can't be saved." },
+  "optionsTitle": { "message": "Summora Settings" },
+  "apiUrlLabel": { "message": "API address" },
+  "optionsSaved": { "message": "Saved ✓" },
+  "errNetwork": { "message": "Network error: can't reach the backend." },
+  "errHttp": {
+    "message": "Save failed (HTTP $status$)",
+    "placeholders": { "status": { "content": "$1" } }
+  }
+}
