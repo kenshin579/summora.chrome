@@ -94,6 +94,9 @@ async function init() {
   renderSaveButton(() => save(url));
 }
 
+// 중복일 때 기존 글의 처리 상태 안내 문구 키.
+const DUP_STATE_KEYS = { pending: "dupStatePending", ready: "dupStateReady" };
+
 async function save(url) {
   const btn = document.createElement("button");
   btn.className = "btn";
@@ -108,16 +111,26 @@ async function save(url) {
   const result = await saveArticle(baseUrl, normalizeUrl(url));
 
   if (result.ok) {
+    const dup = result.status === "duplicate";
     const wrap = document.createElement("div");
     wrap.className = "success";
     const confirm = document.createElement("div");
-    confirm.className = "confirm";
+    confirm.className = dup ? "confirm info" : "confirm";
     const check = document.createElement("span");
     check.className = "check";
-    check.textContent = "✓";
+    check.textContent = dup ? "i" : "✓";
     confirm.appendChild(check);
-    confirm.appendChild(document.createTextNode(t("saved")));
+    // 중복이면 백엔드 메시지(이미 저장됨 / 보관함에 있음)를 그대로 쓰고, 없으면 번역 문구.
+    const label = dup ? result.serverMessage || t("duplicate") : t("saved");
+    confirm.appendChild(document.createTextNode(label));
     wrap.appendChild(confirm);
+    const stateKey = dup ? DUP_STATE_KEYS[result.article?.status] : undefined;
+    if (stateKey) {
+      const state = document.createElement("div");
+      state.className = "state";
+      state.textContent = t(stateKey);
+      wrap.appendChild(state);
+    }
     const id = result.article?.id;
     if (id != null) {
       const a = document.createElement("a");

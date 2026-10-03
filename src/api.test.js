@@ -43,6 +43,31 @@ describe("saveArticle", () => {
     );
   });
 
+  it("409 이면 duplicate + 기존 글 id/상태", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: false,
+        status: 409,
+        json: async () => ({
+          error: "duplicate",
+          message: "이미 저장된 링크입니다",
+          article_id: 42,
+          status: "ready",
+          archived: false,
+        }),
+      }))
+    );
+    const r = await saveArticle("https://api.test", "https://x");
+    expect(r).toEqual({
+      ok: true,
+      status: "duplicate",
+      article: { id: 42, status: "ready" },
+      archived: false,
+      serverMessage: "이미 저장된 링크입니다",
+    });
+  });
+
   it("비-2xx 이면 code:http + serverMessage 통과", async () => {
     vi.stubGlobal(
       "fetch",

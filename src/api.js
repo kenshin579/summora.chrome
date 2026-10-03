@@ -16,6 +16,17 @@ export async function saveArticle(baseUrl, url) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
     });
+    // 409 는 이미 저장된 링크다. 실패가 아니라 기존 글로 안내한다(백엔드 DuplicateResponse).
+    if (res.status === 409) {
+      const body = await res.json();
+      return {
+        ok: true,
+        status: "duplicate",
+        article: { id: body.article_id, status: body.status },
+        archived: Boolean(body.archived),
+        serverMessage: body.message,
+      };
+    }
     if (!res.ok) {
       let serverMessage;
       try {
